@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
+import MapView from 'react-native-maps';
 
 export default function App() {
   return (
@@ -8,7 +9,15 @@ export default function App() {
         <Text style={styles.title}>Прогноз погоды</Text>
       </View>
       <View style={styles.content}>
-        <Text>Здесь будет карта</Text>
+        <MapView 
+          style={styles.map}
+          initialRegion={{
+            latitude: 55.751244,
+            longitude: 37.618423,
+            latitudeDelta: 5,
+            longitudeDelta: 5,
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -33,7 +42,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  map: {
+    flex: 1,
   },
 });
