@@ -1,10 +1,12 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { cities } from './cities';
+import LayerPanel from './LayerPanel';
 
 export default function App() {
   const mapRef = useRef(null);
+  const [activeLayer, setActiveLayer] = useState(null);
 
   const centerMap = () => {
     mapRef.current.animateToRegion({
@@ -80,6 +82,7 @@ export default function App() {
           {renderMarkers()}
         </MapView>
       </View>
+      <LayerPanel onLayerSelect={setActiveLayer} activeLayer={activeLayer} />
     </SafeAreaView>
   );
 }
