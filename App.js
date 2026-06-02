@@ -6,6 +6,33 @@ import { cities } from './cities';
 export default function App() {
   const mapRef = useRef(null);
 
+  const centerMap = () => {
+    mapRef.current.animateToRegion({
+      latitude: 55.751244,
+      longitude: 37.618423,
+      latitudeDelta: 5,
+      longitudeDelta: 5,
+    }, 1000);
+  };
+
+  const showAllMarkers = () => {
+    // Находим крайние точки всех городов
+    const lats = cities.map(c => c.latitude);
+    const lons = cities.map(c => c.longitude);
+    const minLat = Math.min(...lats);
+    const maxLat = Math.max(...lats);
+    const minLon = Math.min(...lons);
+    const maxLon = Math.max(...lons);
+    
+    mapRef.current.fitToCoordinates(
+      cities.map(c => ({ latitude: c.latitude, longitude: c.longitude })),
+      {
+        edgePadding: { top: 100, right: 50, bottom: 100, left: 50 },
+        animated: true,
+      }
+    );
+  };
+
   const renderMarkers = () => {
     return cities.map(city => (
       <Marker
@@ -29,6 +56,16 @@ export default function App() {
       <View style={styles.header}>
         <Text style={styles.title}>Прогноз погоды</Text>
       </View>
+      
+      <View style={styles.leftButtons}>
+        <TouchableOpacity style={styles.button} onPress={centerMap}>
+          <Text style={styles.buttonEmoji}>🎯</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={showAllMarkers}>
+          <Text style={styles.buttonEmoji}>🗺️</Text>
+        </TouchableOpacity>
+      </View>
+      
       <View style={styles.content}>
         <MapView 
           ref={mapRef}
@@ -63,6 +100,30 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+  },
+  leftButtons: {
+    position: 'absolute',
+    top: 100,
+    left: 10,
+    flexDirection: 'row',
+    zIndex: 1,
+  },
+  button: {
+    backgroundColor: 'white',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  buttonEmoji: {
+    fontSize: 24,
   },
   content: {
     flex: 1,
